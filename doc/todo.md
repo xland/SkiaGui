@@ -1,0 +1,12 @@
+- 编译Skia
+  - python tools/git-sync-deps
+  - bin/gn gen out/debug --args='clang_win=\"C:\Program Files\LLVM\" cc=\"clang\" cxx=\"clang++\" extra_cflags=[\"/MTd\"] is_official_build=true is_debug=false skia_use_system_expat=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false 
+skia_use_system_zlib=false skia_use_system_harfbuzz=false skia_use_icu=false'
+  - ninja -C out/debug
+  - bin/gn gen out/release --args='clang_win=\"C:\Program Files\LLVM\" cc=\"clang\" cxx=\"clang++\" extra_cflags=[\"/MT\"] is_debug=false is_official_build=true skia_use_system_expat=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false skia_use_system_harfbuzz=false skia_use_icu=false'
+  - ninja -C out/release 
+  - 还要改几行配置文件的代码，不然它找不到我的VS2022
+- 编译quickjs
+  - CMake Gui开始前要设置以下 -T ClangCL
+  - 我自己写的示例https://github.com/xland/SimpleGUI/tree/main/SimpleGUI
+- 目前验证了纯软渲染的效果，暂时先不搞GPU加速了
