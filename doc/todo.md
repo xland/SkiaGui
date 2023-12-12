@@ -10,3 +10,4 @@ skia_use_system_zlib=false skia_use_system_harfbuzz=false skia_use_icu=false'
   - CMake Gui开始前要设置以下 -T ClangCL
   - 我自己写的示例https://github.com/xland/SimpleGUI/tree/main/SimpleGUI
 - 目前验证了纯软渲染的效果，暂时先不搞GPU加速了
+- 明天搞CMake工程，LIB库，Demo验证程序
