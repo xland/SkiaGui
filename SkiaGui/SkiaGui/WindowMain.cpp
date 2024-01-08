@@ -2,10 +2,28 @@
 #include <windowsx.h>
 #include <dwmapi.h>
 #include <stdint.h>
+#include "include/effects/SkRuntimeEffect.h"
+
+#include "modules/skparagraph/include/Paragraph.h"
+#include "modules/skparagraph/include/ParagraphBuilder.h"
+#include "modules/skparagraph/include/ParagraphStyle.h"
+#include "modules/skparagraph/include/TextStyle.h"
+
 typedef uint32_t Color;
 static constexpr inline Color GetColor(unsigned r, unsigned g, unsigned b, unsigned a = 255) {
     return (a << 24) | (r << 16) | (g << 8) | (b << 0);
 }
+const char* sksl = "const half3 iColor = half3(0, 0.5, 0.75);"
+"half4 main(float2 coord) {"
+"  float alpha = 1 - (coord.y / 150);"
+"  if (coord.x < 100) {"
+"    /* Correctly premultiplied version of color */"
+"    return iColor.rgb1 * alpha;"
+"  } else {"
+"    /* Returning an unpremultiplied color (just setting alpha) leads to over-bright colors. */"
+"    return half4(iColor, alpha);"
+"  }"
+"}";
 
 LRESULT CALLBACK WindowMain::RouteWindowMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     if (msg == WM_NCCREATE)
@@ -106,7 +124,39 @@ LRESULT CALLBACK WindowMain::WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPAR
             SkImageInfo info = SkImageInfo::MakeN32Premul(w, h);
             surface = SkSurface::MakeRasterDirect(info, pixelData, w*4);    
             auto canvas = surface->getCanvas();
-            canvas->clear(GetColor(248, 248, 248));
+            //canvas->clear(GetColor(248, 248, 248));
+            //auto [effect, err] = SkRuntimeEffect::MakeForShader(SkString(sksl));
+            //sk_sp<SkShader> myShader = effect->makeShader(/*uniforms=*/ nullptr, /*children=*/{});
+            //canvas->drawColor(SK_ColorGRAY);
+            //SkPaint p;
+            //p.setShader(myShader);
+            //canvas->drawPaint(p);
+
+            SkPaint paint;
+            paint.setColor(SK_ColorRED);
+            paint.setStroke(false);
+            sk_sp<skia::textlayout::FontCollection> fontCollection = sk_make_sp<skia::textlayout::FontCollection>();
+            fontCollection->setDefaultFontManager(SkFontMgr::RefDefault());
+            fontCollection->enableFontFallback();
+            skia::textlayout::ParagraphStyle paraStyle;
+            auto builder = skia::textlayout::ParagraphBuilder::make(paraStyle, fontCollection);
+            skia::textlayout::TextStyle defaultStyle;
+            std::vector<SkString> ffs;
+            ffs.push_back(SkString{ "Arial" });
+            defaultStyle.setFontFamilies(ffs);
+            defaultStyle.setFontStyle(SkFontStyle(SkFontStyle::Weight::kBold_Weight, SkFontStyle::Width::kNormal_Width, SkFontStyle::Slant::kItalic_Slant));
+            //defaultStyle.setDecoration(skTextDe(TextDecoration::kNoDecoration));
+            defaultStyle.setFontSize(30);
+            defaultStyle.setForegroundColor(paint);
+            builder->pushStyle(defaultStyle);
+            builder->addPlaceholder(skia::textlayout::PlaceholderStyle());
+            std::string hello = "测试";
+            builder->addText(hello.data(), hello.size());
+            auto paragraph = builder->Build();
+            auto l = builder->getText();
+            paragraph->layout(2048.f);
+            paragraph->paint(canvas, 200, 200);
+
         }
         BITMAPINFO info = { sizeof(BITMAPINFOHEADER), w, 0 - h, 1, 32, BI_RGB, w * 4 * h, 0, 0, 0, 0 };
         SetDIBits(hdc, bottomHbitmap, 0, h, pixelData, &info, DIB_RGB_COLORS); //使用指定的DIB颜色数据来设置位图中的像素
