@@ -3,14 +3,17 @@
 #include <include/core/SkCanvas.h>
 #include "Eventer.h"
 
-class ElementBase:public Eventer
+class Element:public Eventer
 {
 public:
-	ElementBase();
-	~ElementBase();
+	Element();
+	~Element();
 	void paint(SkCanvas* canvas);
+	void layout();
 public:
-	std::vector<ElementBase> children;
+	std::vector<Element> children;
+	float x, y, w, h;
+
 private:
 
 };

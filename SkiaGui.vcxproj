@@ -145,6 +145,7 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Element\ElementText.cpp" />
     <ClCompile Include="Element\ElementBase.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="WindowMain.cpp" />
@@ -157,6 +158,7 @@
     <Manifest Include="main.manifest" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Element\ElementText.h" />
     <ClInclude Include="Element\ElementBase.h" />
     <ClInclude Include="Element\Eventer.h" />
     <ClInclude Include="Lib\clay\clay.h" />

@@ -13,6 +13,7 @@
 #include <windowsx.h>
 #include "../Lib/clay/clay.h"
 #include "../Element/Eventer.h"
+#include "../Element/Element.h"
 #include "Backend.h"
 
 
@@ -22,6 +23,7 @@ public:
 	WindowBase();
 	~WindowBase();
 	void show();
+	void layout();
 public:
 	int x, y, w, h;
 	HWND hwnd;
@@ -36,5 +38,6 @@ private:
 	void initLayout();
 private:
 	std::unique_ptr<Backend> backend;
+	std::vector<Element> elements;
 };
 

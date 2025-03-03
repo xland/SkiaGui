@@ -36,6 +36,9 @@
     <ClCompile Include="Element\ElementBase.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Element\ElementText.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="main.manifest" />
@@ -63,6 +66,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Element\ElementBase.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Element\ElementText.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

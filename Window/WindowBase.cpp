@@ -48,6 +48,16 @@ void WindowBase::show()
     emit("onShown");
 }
 
+void WindowBase::layout()
+{
+    Clay_BeginLayout();
+    for (auto& ele:elements)
+    {
+        ele.layout();
+    }
+    Clay_RenderCommandArray renderCommands = Clay_EndLayout();
+}
+
 bool WindowBase::alphaWindow()
 {
     if (!IsWindowsVistaOrGreater()) { return false; }
