@@ -18,8 +18,52 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Window\Backend.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Window\OpenGL.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Window\Raster.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Window\WindowBase.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowMain.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Element\ElementBase.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="main.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Lib\clay\clay.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Window\Backend.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Window\OpenGL.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Window\Raster.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Window\WindowBase.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Element\Eventer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowMain.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Element\ElementBase.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

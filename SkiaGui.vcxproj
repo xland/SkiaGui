@@ -114,6 +114,10 @@
       <AdditionalDependencies>skia.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;shell32.lib;imm32.lib;usp10.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>D:\sdk\skia\out\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <Manifest>
+      <AdditionalManifestFiles>$(ProjectDir)main.manifest %(AdditionalManifestFiles)</AdditionalManifestFiles>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -141,10 +145,26 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Element\ElementBase.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="WindowMain.cpp" />
+    <ClCompile Include="Window\Backend.cpp" />
+    <ClCompile Include="Window\OpenGL.cpp" />
+    <ClCompile Include="Window\Raster.cpp" />
+    <ClCompile Include="Window\WindowBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="main.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Element\ElementBase.h" />
+    <ClInclude Include="Element\Eventer.h" />
+    <ClInclude Include="Lib\clay\clay.h" />
+    <ClInclude Include="WindowMain.h" />
+    <ClInclude Include="Window\Backend.h" />
+    <ClInclude Include="Window\OpenGL.h" />
+    <ClInclude Include="Window\Raster.h" />
+    <ClInclude Include="Window\WindowBase.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

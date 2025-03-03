@@ -11,7 +11,7 @@
 #include <dwmapi.h>
 #include <versionhelpers.h>
 #include <windowsx.h>
-
+#include "../Lib/clay/clay.h"
 #include "../Element/Eventer.h"
 #include "Backend.h"
 
@@ -33,6 +33,7 @@ protected:
 private:
 	static LRESULT CALLBACK routeWinMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	LRESULT CALLBACK processWinMsg(UINT msg, WPARAM wParam, LPARAM lParam);
+	void initLayout();
 private:
 	std::unique_ptr<Backend> backend;
 };

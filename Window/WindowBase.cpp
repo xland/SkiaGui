@@ -1,5 +1,14 @@
 ﻿#include "WindowBase.h"
 
+void clayErrors(Clay_ErrorData errorData)
+{
+    // See the Clay_ErrorData struct for more information
+    printf("%s", errorData.errorText.chars);
+    switch (errorData.errorType) {
+        // etc
+    }
+}
+
 WindowBase::WindowBase()
 {
 }
@@ -10,7 +19,7 @@ WindowBase::~WindowBase()
 
 void WindowBase::initWindow()
 {
-    const TCHAR clsName[] = L"SkiaInput";
+    const TCHAR clsName[] = L"SkiaGui";
     static WNDCLASSEX wcx;
     static bool isClsReg = false;
     auto hinstance = GetModuleHandle(NULL);
@@ -30,6 +39,7 @@ void WindowBase::initWindow()
     hwnd = CreateWindowEx(NULL, clsName, clsName, WS_OVERLAPPEDWINDOW, x, y, w, h, nullptr, nullptr, hinstance, nullptr);
     SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)this);
     backend = Backend::create(this);
+    initLayout();
 }
 void WindowBase::show()
 {
@@ -68,6 +78,17 @@ bool WindowBase::alphaWindow()
         return false;
     }
 }
+void WindowBase::initLayout()
+{
+    uint64_t totalMemorySize = Clay_MinMemorySize();
+    Clay_Arena arena = Clay_CreateArenaWithCapacityAndMemory(totalMemorySize, malloc(totalMemorySize));
+    Clay_Dimensions dimension{ .width{(float)w},.height{(float)h} };
+    Clay_ErrorHandler errorHandler{ .errorHandlerFunction{clayErrors} };
+    Clay_Initialize(arena, dimension, errorHandler);
+}
+
+
+
 bool WindowBase::setClipboard(const std::wstring& text)
 {
     if (!OpenClipboard(nullptr))

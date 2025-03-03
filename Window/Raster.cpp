@@ -1,5 +1,5 @@
 #include "Raster.h"
-#include "../WindowBase.h"
+#include "WindowBase.h"
 
 Raster::Raster(WindowBase* win):Backend(win)
 {

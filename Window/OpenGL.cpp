@@ -17,7 +17,7 @@
 
 #include <Windows.h>
 #include <GL/gl.h>
-#include "../WindowBase.h"
+#include "WindowBase.h"
 #include "OpenGL.h"
 
 
