@@ -115,8 +115,6 @@ void WindowBase::initLayout()
     body.id = CLAY_ID("body");
     body.size.width = CLAY_SIZING_GROW(0);
     body.size.height = CLAY_SIZING_GROW(0);
-    body.padding = CLAY_PADDING_ALL(0);
-    body.span = 0;
 }
 
 bool WindowBase::setClipboard(const std::wstring& text)

@@ -39,6 +39,9 @@
     <ClCompile Include="Element\Element.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Element\Image.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="main.manifest" />
@@ -69,6 +72,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Element\Element.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Element\Image.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

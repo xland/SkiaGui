@@ -147,6 +147,7 @@
   <ItemGroup>
     <ClCompile Include="Element\Text.cpp" />
     <ClCompile Include="Element\Element.cpp" />
+    <ClCompile Include="Element\Image.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="WindowMain.cpp" />
     <ClCompile Include="Window\Backend.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="Element\Text.h" />
     <ClInclude Include="Element\Element.h" />
     <ClInclude Include="Element\Eventer.h" />
+    <ClInclude Include="Element\Image.h" />
     <ClInclude Include="Lib\clay\clay.h" />
     <ClInclude Include="WindowMain.h" />
     <ClInclude Include="Window\Backend.h" />

@@ -24,7 +24,9 @@ void Element::paint(SkCanvas* canvas)
     else {
         canvas->drawRect(rect, paint);
     }
-    
+    for (auto& ele : children) {
+        ele->paint(canvas);
+    }
 }
 
 void Element::layout()
