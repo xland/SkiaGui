@@ -36,8 +36,16 @@ void WindowBase::initWindow()
         isClsReg = true;
     }
     //必须是WS_POPUP，不能是WS_OVERLAPPEDWINDOW，不然渲染会出问题
-    hwnd = CreateWindowEx(NULL, clsName, clsName, WS_OVERLAPPEDWINDOW, x, y, w, h, nullptr, nullptr, hinstance, nullptr);
+    hwnd = CreateWindowEx(NULL, clsName, clsName, WS_POPUP, x, y, w, h, nullptr, nullptr, hinstance, nullptr);
     SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)this);
+    BOOL attrib = TRUE;
+    DwmSetWindowAttribute(hwnd, DWMWA_TRANSITIONS_FORCEDISABLED, &attrib, sizeof(attrib));
+
+    DWMNCRENDERINGPOLICY policy = DWMNCRP_ENABLED;
+    DwmSetWindowAttribute(hwnd, DWMWA_NCRENDERING_POLICY, &policy, sizeof(policy));
+    MARGINS margins = { 1,1,1,1 };
+    DwmExtendFrameIntoClientArea(hwnd, &margins);
+
     backend = Backend::create(this);
     initLayout();
 }
@@ -50,11 +58,10 @@ void WindowBase::show()
 
 void WindowBase::layout()
 {
+    Clay_Dimensions dimension{ .width{(float)w}, .height{(float)h} };
+    Clay_SetLayoutDimensions(dimension);
     Clay_BeginLayout();
-    for (auto& ele:elements)
-    {
-        ele->layout();
-    }
+    body.layout();
     Clay_RenderCommandArray renderCommands = Clay_EndLayout();
     for (int i = 0; i < renderCommands.length; i++) {
         Clay_RenderCommand* renderCommand = &renderCommands.internalArray[i];
@@ -104,9 +111,13 @@ void WindowBase::initLayout()
     Clay_Dimensions dimension{ .width{(float)w},.height{(float)h} };
     Clay_ErrorHandler errorHandler{ .errorHandlerFunction{clayErrors} };
     Clay_Initialize(arena, dimension, errorHandler);
+
+    body.id = CLAY_ID("body");
+    body.size.width = CLAY_SIZING_GROW(0);
+    body.size.height = CLAY_SIZING_GROW(0);
+    body.padding = CLAY_PADDING_ALL(0);
+    body.span = 0;
 }
-
-
 
 bool WindowBase::setClipboard(const std::wstring& text)
 {
@@ -178,41 +189,45 @@ LRESULT WindowBase::routeWinMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
     }
     switch (msg)
     {
-    //case WM_NCCALCSIZE:
-    //{
-    //    if (wParam == TRUE) {
-    //        NCCALCSIZE_PARAMS* pncsp = reinterpret_cast<NCCALCSIZE_PARAMS*>(lParam);
-    //        pncsp->rgrc[0] = pncsp->rgrc[1]; //窗口客户区覆盖整个窗口
-    //        return 0; //确认改变窗口客户区
-    //    }
-    //    return DefWindowProc(hWnd, msg, wParam, lParam);
-    //}
-    case WM_ERASEBKGND:
-    {
-        return TRUE;
-    }
-    case WM_CLOSE:
-    {
-        DestroyWindow(hWnd);
-        return 0;
-    }
-    case WM_DESTROY:
-    {
-        SetWindowLongPtr(hWnd, GWLP_USERDATA, 0);
-        UnregisterClass(L"SkiaInput", nullptr);
-		PostQuitMessage(0);
-        return 0;
-    }
-    default:
-    {
-        return obj->processWinMsg(msg, wParam, lParam);
-    }
+        case WM_NCCALCSIZE:
+        {
+            if (wParam == TRUE) {
+                NCCALCSIZE_PARAMS* pncsp = reinterpret_cast<NCCALCSIZE_PARAMS*>(lParam);
+                pncsp->rgrc[0] = pncsp->rgrc[1]; //窗口客户区覆盖整个窗口
+                return 0; //确认改变窗口客户区
+            }
+            return DefWindowProc(hWnd, msg, wParam, lParam);
+        }
+        case WM_ERASEBKGND:
+        {
+            return TRUE;
+        }
+        case WM_CLOSE:
+        {
+            DestroyWindow(hWnd);
+            return 0;
+        }
+        case WM_DESTROY:
+        {
+            SetWindowLongPtr(hWnd, GWLP_USERDATA, 0);
+            UnregisterClass(L"SkiaInput", nullptr);
+		    PostQuitMessage(0);
+            return 0;
+        }
+        default:
+        {
+            return obj->processWinMsg(msg, wParam, lParam);
+        }
     }
 }
 LRESULT WindowBase::processWinMsg(UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch (msg)
     {
+    case WM_NCHITTEST:
+    {
+        return hitTest(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+    }
     case WM_TIMER: {
         emit("onTimer",(size_t)wParam);
         return 0;
@@ -228,6 +243,7 @@ LRESULT WindowBase::processWinMsg(UINT msg, WPARAM wParam, LPARAM lParam)
         w = LOWORD(lParam);
         h = HIWORD(lParam);
         backend->resize();
+        layout();
         emit("onSize", w, h);
         return 0;
     }
@@ -242,8 +258,7 @@ LRESULT WindowBase::processWinMsg(UINT msg, WPARAM wParam, LPARAM lParam)
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hwnd, &ps);
         auto canvas = backend->getCanvas();
-        canvas->clear(SkColorSetARGB(bgColor.a, bgColor.r, bgColor.g, bgColor.b));
-        for (auto& ele:elements)
+        for (auto& ele:body.children)
         {
             ele->paint(canvas);
         }
@@ -298,4 +313,30 @@ LRESULT WindowBase::processWinMsg(UINT msg, WPARAM wParam, LPARAM lParam)
     }
     }
     return 0;
+}
+
+LRESULT WindowBase::hitTest(const int& x, const int& y) {
+    RECT winRect;
+    GetWindowRect(hwnd, &winRect);
+    if (x > winRect.left && y > winRect.top && x < winRect.right && y < winRect.bottom) {
+        int borderWidth = 5;
+        if (x < winRect.left + borderWidth && y < winRect.top + borderWidth) return HTTOPLEFT;
+        else if (x < winRect.left + borderWidth && y > winRect.bottom - borderWidth) return HTBOTTOMLEFT;
+        else if (x > winRect.right - borderWidth && y > winRect.bottom - borderWidth) return HTBOTTOMRIGHT;
+        else if (x > winRect.right - borderWidth && y < winRect.top + borderWidth) return HTTOPRIGHT;
+        else if (x < winRect.left + borderWidth) return HTLEFT;
+        else if (x > winRect.right - borderWidth) return HTRIGHT;
+        else if (y < winRect.top + borderWidth) return HTTOP;
+        else if (y > winRect.bottom - borderWidth) return HTBOTTOM;
+        //else if (IsMouseInCaptionArea(x - winRect.left, y - winRect.top))
+        //{
+        //    return HTCAPTION;
+        //}
+        //return HTCLIENT;
+        return HTCAPTION;
+    }
+    else
+    {
+        return HTNOWHERE;
+    }
 }

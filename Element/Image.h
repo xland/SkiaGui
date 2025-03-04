@@ -1,10 +1,9 @@
 #pragma once
 #include "Element.h"
-
-class Text:public Element
+class Image:public Element
 {
 public:
-	Text();
-	~Text();
+	Image();
+	~Image();
 };
 

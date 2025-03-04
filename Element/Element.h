@@ -14,7 +14,7 @@ public:
 	void layout();
 public:
 	std::vector<std::shared_ptr<Element>> children;
-	float x, y,w,h;
+	float x,y,w,h;
 	bool isDirty;
 	Clay_ElementId id;
 	Clay_Padding padding{ CLAY_PADDING_ALL(2) };

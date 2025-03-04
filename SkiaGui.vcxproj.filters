@@ -33,10 +33,10 @@
     <ClCompile Include="WindowMain.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Element\ElementBase.cpp">
+    <ClCompile Include="Element\Text.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Element\ElementText.cpp">
+    <ClCompile Include="Element\Element.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -65,11 +65,14 @@
     <ClInclude Include="WindowMain.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Element\ElementBase.h">
+    <ClInclude Include="Element\Text.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Element\ElementText.h">
+    <ClInclude Include="Element\Element.h">
       <Filter>头文件</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Doc\todo.md" />
   </ItemGroup>
 </Project>

@@ -27,8 +27,7 @@ public:
 public:
 	int x, y, w, h;
 	HWND hwnd;
-	Clay_Color bgColor{ .r{255}, .g{255}, .b{255}, .a{255} };
-	std::vector<std::shared_ptr<Element>> elements;
+	Element body;
 protected:
 	void initWindow();
 	bool alphaWindow();
@@ -37,6 +36,7 @@ protected:
 private:
 	static LRESULT CALLBACK routeWinMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	LRESULT CALLBACK processWinMsg(UINT msg, WPARAM wParam, LPARAM lParam);
+	LRESULT hitTest(const int& x, const int& y);
 	void initLayout();
 private:
 	std::unique_ptr<Backend> backend;

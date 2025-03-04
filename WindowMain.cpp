@@ -6,12 +6,27 @@ WindowMain::WindowMain()
 {
     initWinPosSize();
     initWindow();
-    auto ele = std::make_shared<Element>();
-    ele->id = CLAY_ID("banner");
-    ele->bgColor = { .r{255}, .g{55}, .b{155}, .a{55} };
-    ele->size.width = CLAY_SIZING_FIXED(50);
-    ele->size.height = CLAY_SIZING_FIXED(250);
-    elements.push_back(ele);
+    alphaWindow();
+
+    auto leftBar = std::make_shared<Element>();
+    leftBar->id = CLAY_ID("leftBar");
+    leftBar->bgColor = { .r{28}, .g{98}, .b{158}, .a{127} };
+    leftBar->size.width = CLAY_SIZING_FIXED(360);
+    leftBar->size.height = CLAY_SIZING_GROW(0);
+    leftBar->direction = CLAY_TOP_TO_BOTTOM;
+    body.children.push_back(std::move(leftBar));
+
+    auto logo = std::make_shared<Element>();
+    logo->id = CLAY_ID("logo");
+
+
+    auto rightBar = std::make_shared<Element>();
+    rightBar->id = CLAY_ID("rightBar");
+    rightBar->bgColor = { .r{255}, .g{255}, .b{255}, .a{255} };
+    rightBar->size.width = CLAY_SIZING_GROW(0);
+    rightBar->size.height = CLAY_SIZING_GROW(0);
+    body.children.push_back(std::move(rightBar));
+
     layout();
 }
 

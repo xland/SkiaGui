@@ -168,6 +168,9 @@
     <ClInclude Include="Window\Raster.h" />
     <ClInclude Include="Window\WindowBase.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Doc\todo.md" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
