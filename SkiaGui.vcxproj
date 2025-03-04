@@ -111,8 +111,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>skia.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;shell32.lib;imm32.lib;usp10.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>D:\sdk\skia\out\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>yogacore.lib;skia.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;shell32.lib;imm32.lib;usp10.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\sdk\skia\out\$(Configuration);D:\sdk\yoga\build\yoga\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Manifest>
       <AdditionalManifestFiles>$(ProjectDir)main.manifest %(AdditionalManifestFiles)</AdditionalManifestFiles>
@@ -136,8 +136,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>skia.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;shell32.lib;imm32.lib;usp10.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>D:\sdk\skia\out\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>yogacore.lib;skia.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;shell32.lib;imm32.lib;usp10.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\sdk\skia\out\$(Configuration);D:\sdk\yoga\build\yoga\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Manifest>
       <AdditionalManifestFiles>$(ProjectDir)main.manifest %(AdditionalManifestFiles)</AdditionalManifestFiles>
@@ -171,6 +171,7 @@
     <ClInclude Include="Window\WindowBase.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Doc\CLay思路.md" />
     <None Include="Doc\todo.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

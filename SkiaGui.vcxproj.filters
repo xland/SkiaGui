@@ -80,5 +80,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Doc\todo.md" />
+    <None Include="Doc\CLay思路.md" />
   </ItemGroup>
 </Project>
