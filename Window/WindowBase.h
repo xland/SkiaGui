@@ -27,6 +27,8 @@ public:
 public:
 	int x, y, w, h;
 	HWND hwnd;
+	Clay_Color bgColor{ .r{255}, .g{255}, .b{255}, .a{255} };
+	std::vector<std::shared_ptr<Element>> elements;
 protected:
 	void initWindow();
 	bool alphaWindow();
@@ -38,6 +40,5 @@ private:
 	void initLayout();
 private:
 	std::unique_ptr<Backend> backend;
-	std::vector<Element> elements;
 };
 

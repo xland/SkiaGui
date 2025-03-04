@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -145,8 +145,8 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Element\ElementText.cpp" />
-    <ClCompile Include="Element\ElementBase.cpp" />
+    <ClCompile Include="Element\Text.cpp" />
+    <ClCompile Include="Element\Element.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="WindowMain.cpp" />
     <ClCompile Include="Window\Backend.cpp" />
@@ -158,8 +158,8 @@
     <Manifest Include="main.manifest" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Element\ElementText.h" />
-    <ClInclude Include="Element\ElementBase.h" />
+    <ClInclude Include="Element\Text.h" />
+    <ClInclude Include="Element\Element.h" />
     <ClInclude Include="Element\Eventer.h" />
     <ClInclude Include="Lib\clay\clay.h" />
     <ClInclude Include="WindowMain.h" />

@@ -53,9 +53,18 @@ void WindowBase::layout()
     Clay_BeginLayout();
     for (auto& ele:elements)
     {
-        ele.layout();
+        ele->layout();
     }
     Clay_RenderCommandArray renderCommands = Clay_EndLayout();
+    for (int i = 0; i < renderCommands.length; i++) {
+        Clay_RenderCommand* renderCommand = &renderCommands.internalArray[i];
+        auto ele = static_cast<Element*>(renderCommand->userData);
+        ele->x = renderCommand->boundingBox.x;
+        ele->y = renderCommand->boundingBox.y;
+        ele->w = renderCommand->boundingBox.width;
+        ele->h = renderCommand->boundingBox.height;
+        ele->isDirty = true;
+    }
 }
 
 bool WindowBase::alphaWindow()
@@ -232,7 +241,13 @@ LRESULT WindowBase::processWinMsg(UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_PAINT: {
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hwnd, &ps);
-        emit("onPaint", backend->getCanvas());
+        auto canvas = backend->getCanvas();
+        canvas->clear(SkColorSetARGB(bgColor.a, bgColor.r, bgColor.g, bgColor.b));
+        for (auto& ele:elements)
+        {
+            ele->paint(canvas);
+        }
+        emit("onPaint", canvas);
         backend->paint(hdc);
         ReleaseDC(hwnd, hdc);
         EndPaint(hwnd, &ps);
