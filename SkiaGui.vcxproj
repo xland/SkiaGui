@@ -105,7 +105,7 @@
       <PreprocessorDefinitions>_SILENCE_ALL_CXX20_DEPRECATION_WARNINGS;NOMINMAX;DEPRECATION_WARNINGS;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>D:\sdk\skia;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\sdk\skia;D:\sdk\yoga;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -128,7 +128,7 @@
       <PreprocessorDefinitions>_SILENCE_ALL_CXX20_DEPRECATION_WARNINGS;NOMINMAX;DEPRECATION_WARNINGS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>D:\sdk\skia;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\sdk\skia;D:\sdk\yoga;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -163,7 +163,6 @@
     <ClInclude Include="Element\Element.h" />
     <ClInclude Include="Element\Eventer.h" />
     <ClInclude Include="Element\Image.h" />
-    <ClInclude Include="Lib\clay\clay.h" />
     <ClInclude Include="WindowMain.h" />
     <ClInclude Include="Window\Backend.h" />
     <ClInclude Include="Window\OpenGL.h" />

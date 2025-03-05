@@ -2,7 +2,7 @@
 #include <vector>
 #include <include/core/SkCanvas.h>
 #include <include/core/SkRRect.h>
-#include "../Lib/clay/clay.h"
+#include <yoga/Yoga.h>
 #include "Eventer.h"
 
 class Element:public Eventer
@@ -10,21 +10,28 @@ class Element:public Eventer
 public:
 	Element();
 	~Element();
-	virtual void paint(SkCanvas* canvas);
-	virtual void layout();
-public:
-	std::vector<std::shared_ptr<Element>> children;
-	float x,y,w,h;
-	bool isDirty;
-	Clay_ElementId id;
-	Clay_Padding padding{ CLAY_PADDING_ALL(0) };
-	Clay_Sizing size;
-	Clay_LayoutDirection direction{ CLAY_LEFT_TO_RIGHT };
-	Clay_ChildAlignment align{ CLAY_ALIGN_X_LEFT };
-	uint16_t span{0};
-	Clay_Color bgColor{ .r{255}, .g{255}, .b{255}, .a{255} };
-	Clay_CornerRadius radius{ .topLeft{0}, .topRight{0}, .bottomLeft{0}, .bottomRight{0} };
-private:
+	void paint(SkCanvas* canvas);
+	void addChild(std::shared_ptr<Element> ele);
 
+	void setLayoutPadding(float padding);
+	void setLayoutPadding(float left, float top, float right, float bottom);
+	void setLayoutMargin(float margin);
+	void setLayoutMargin(float left, float top, float right, float bottom);
+	void setSize(float w, float h);
+	void setWidth(float w);
+	void setHeight(float h);
+	void setAlignSelf(YGAlign align);
+	void setFlexDirection(YGFlexDirection direction);
+	void setFlex(float flex);
+	void setJustifyContent(YGJustify justifyContent);
+	void setRadius(float r);
+	void setRadisu(float lt, float rt, float rb, float lb);
+public:
+	bool isDirty;
+	SkColor bgColor{ 0X00000000 };
+	float radiusLT, radiusRT, radiusRB, radiusLB;
+	YGNodeRef node;
+	std::vector<std::shared_ptr<Element>> children;
+private:
 };
 

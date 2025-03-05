@@ -11,13 +11,12 @@
 #include <dwmapi.h>
 #include <versionhelpers.h>
 #include <windowsx.h>
-#include "../Lib/clay/clay.h"
-#include "../Element/Eventer.h"
+#include <yoga/Yoga.h>
 #include "../Element/Element.h"
 #include "Backend.h"
 
 
-class WindowBase:public Eventer
+class WindowBase:public Element
 {
 public:
 	WindowBase();
@@ -27,18 +26,15 @@ public:
 public:
 	int x, y, w, h;
 	HWND hwnd;
-	Element body;
 protected:
 	void initWindow();
 	bool alphaWindow();
-	bool setClipboard(const std::wstring& text);
-	std::wstring getClipboard();
 private:
 	static LRESULT CALLBACK routeWinMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	LRESULT CALLBACK processWinMsg(UINT msg, WPARAM wParam, LPARAM lParam);
 	LRESULT hitTest(const int& x, const int& y);
-	void initLayout();
 private:
 	std::unique_ptr<Backend> backend;
+	YGConfigRef config;
 };
 

@@ -47,9 +47,6 @@
     <Manifest Include="main.manifest" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Lib\clay\clay.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Window\Backend.h">
       <Filter>头文件</Filter>
     </ClInclude>

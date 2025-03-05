@@ -1,6 +1,3 @@
-#define CLAY_IMPLEMENTATION
-#include "Lib/clay/clay.h"
-
 #include <Windows.h>
 #include "WindowMain.h"
 

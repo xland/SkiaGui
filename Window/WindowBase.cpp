@@ -1,20 +1,12 @@
 ﻿#include "WindowBase.h"
 
-void clayErrors(Clay_ErrorData errorData)
-{
-    // See the Clay_ErrorData struct for more information
-    printf("%s", errorData.errorText.chars);
-    switch (errorData.errorType) {
-        // etc
-    }
-}
-
 WindowBase::WindowBase()
 {
 }
 
 WindowBase::~WindowBase()
 {
+    YGConfigFree(config);
 }
 
 void WindowBase::initWindow()
@@ -45,9 +37,10 @@ void WindowBase::initWindow()
     DwmSetWindowAttribute(hwnd, DWMWA_NCRENDERING_POLICY, &policy, sizeof(policy));
     MARGINS margins = { 1,1,1,1 };
     DwmExtendFrameIntoClientArea(hwnd, &margins);
-
     backend = Backend::create(this);
-    initLayout();
+    config = YGConfigNew();
+    YGConfigSetPointScaleFactor(config, 1.5f); //todo
+    YGNodeSetConfig(node, config);
 }
 void WindowBase::show()
 {
@@ -58,20 +51,7 @@ void WindowBase::show()
 
 void WindowBase::layout()
 {
-    Clay_Dimensions dimension{ .width{(float)w}, .height{(float)h} };
-    Clay_SetLayoutDimensions(dimension);
-    Clay_BeginLayout();
-    body.layout();
-    Clay_RenderCommandArray renderCommands = Clay_EndLayout();
-    for (int i = 0; i < renderCommands.length; i++) {
-        Clay_RenderCommand* renderCommand = &renderCommands.internalArray[i];
-        auto ele = static_cast<Element*>(renderCommand->userData);
-        ele->x = renderCommand->boundingBox.x;
-        ele->y = renderCommand->boundingBox.y;
-        ele->w = renderCommand->boundingBox.width;
-        ele->h = renderCommand->boundingBox.height;
-        ele->isDirty = true;
-    }
+    YGNodeCalculateLayout(node, w, h, YGDirectionLTR);
 }
 
 bool WindowBase::alphaWindow()
@@ -103,80 +83,6 @@ bool WindowBase::alphaWindow()
         DwmEnableBlurBehindWindow(hwnd, &bb);
         return false;
     }
-}
-void WindowBase::initLayout()
-{
-    uint64_t totalMemorySize = Clay_MinMemorySize();
-    Clay_Arena arena = Clay_CreateArenaWithCapacityAndMemory(totalMemorySize, malloc(totalMemorySize));
-    Clay_Dimensions dimension{ .width{(float)w},.height{(float)h} };
-    Clay_ErrorHandler errorHandler{ .errorHandlerFunction{clayErrors} };
-    Clay_Initialize(arena, dimension, errorHandler);
-
-    body.id = CLAY_ID("body");
-    body.size.width = CLAY_SIZING_GROW(0);
-    body.size.height = CLAY_SIZING_GROW(0);
-}
-
-bool WindowBase::setClipboard(const std::wstring& text)
-{
-    if (!OpenClipboard(nullptr))
-    {
-        return false;
-    }
-    EmptyClipboard();
-    size_t size = (text.length() + 1) * sizeof(wchar_t);
-    HGLOBAL hGlobal = GlobalAlloc(GMEM_MOVEABLE, size);
-    if (hGlobal == nullptr)
-    {
-        CloseClipboard();
-        return false;
-    }
-    wchar_t* pData = static_cast<wchar_t*>(GlobalLock(hGlobal));
-    if (pData == nullptr)
-    {
-        GlobalFree(hGlobal);
-        CloseClipboard();
-        return false;
-    }
-    wcscpy_s(pData, text.length() + 1, text.c_str());
-    GlobalUnlock(hGlobal);
-    if (SetClipboardData(CF_UNICODETEXT, hGlobal) == nullptr)
-    {
-        GlobalFree(hGlobal);
-        CloseClipboard();
-        return false;
-    }
-    CloseClipboard();
-    return true;
-}
-
-std::wstring WindowBase::getClipboard()
-{
-    if (!OpenClipboard(nullptr))
-    {
-        return L"";
-    }
-    if (!IsClipboardFormatAvailable(CF_UNICODETEXT))
-    {
-        CloseClipboard();
-        return L"";
-    }
-    HGLOBAL hGlobal = GetClipboardData(CF_UNICODETEXT);
-    if (hGlobal == nullptr)
-    {
-        CloseClipboard();
-        return L"";
-    }
-	auto pData = static_cast<wchar_t*>(GlobalLock(hGlobal));
-	if (pData == nullptr)
-	{
-		CloseClipboard();
-		return L"";
-	}
-    std::wstring result{ pData };
-    GlobalUnlock(hGlobal);
-    CloseClipboard();
-    return result;
 }
 
 LRESULT WindowBase::routeWinMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -256,7 +162,7 @@ LRESULT WindowBase::processWinMsg(UINT msg, WPARAM wParam, LPARAM lParam)
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hwnd, &ps);
         auto canvas = backend->getCanvas();
-        for (auto& ele:body.children)
+        for (auto& ele:children)
         {
             ele->paint(canvas);
         }
@@ -304,6 +210,12 @@ LRESULT WindowBase::processWinMsg(UINT msg, WPARAM wParam, LPARAM lParam)
         else {
             emit("onKeyDown", (size_t)wParam);
         }
+        break;
+    }
+    case WM_DPICHANGED:
+    {
+        //todo
+        //YGNodeSetConfig(node, config);
         break;
     }
     default: {
